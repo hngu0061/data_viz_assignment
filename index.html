@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wine review rating</title>
+
+    <!-- Setting up bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Styling for web page -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Setting up D3 script-->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <!-- Color Scale -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  </head>
+  <body>
+    <div class="content">
+      <!-- Choropleth map -->
+      <h1>Choropleth map</h1>
+      <div id="choropleth_map">This div for the world map</div>
+
+      <!-- Dropdown list to choose a country to display -->
+      <h2>Choose a country to display</h2>
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdown_countries"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Choose a country
+        </button>
+        <div
+          id="menu"
+          class="dropdown-menu"
+          aria-labelledby="dropdown_countries"
+        >
+          <form class="px-4 py-2">
+            <input
+              type="search"
+              class="form-control"
+              id="searchCountry"
+              placeholder="Choose a country"
+              autofocus="autofocus"
+            />
+          </form>
+          <div id="menuItems"></div>
+          <div id="empty" class="dropdown-header">No countries found</div>
+        </div>
+      </div>
+
+      <!-- Div to display information of a country -->
+      <div id="country_map"></div>
+
+      <!-- Div to display scatter plot and bar chart -->
+      <div class="containter">
+        <div id="scatter_plot">
+          <!-- Initialize a select button -->
+          <select id="selectButton"></select>
+          <br />
+          <br />
+
+          <form id="scatter_plot_factor">
+            <label class="radio-inline">
+              <input type="radio" name="optradio" value="price" checked />Price
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="optradio" value="year" />Vintage Year
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="optradio" value="price_year" />Price and
+              Vintage Year
+            </label>
+          </form>
+
+          <!-- Create a div where the graph will take place -->
+          <div id="my_scatter_plot"></div>
+        </div>
+        <div id="bar_chart">Bar chart</div>
+      </div>
+    </div>
+  </body>
 </html>
+
+<script src="country_drop_down.js"></script>
+<script src="scatter_plot.js"></script>
+<script src="bar_chart.js"></script>
