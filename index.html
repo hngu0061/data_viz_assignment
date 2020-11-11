@@ -25,12 +25,31 @@
 
     <!-- Color Scale -->
     <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+
+    <!-- Geopath script for choropleth map-->
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
   </head>
   <body>
     <div class="content">
       <!-- Choropleth map -->
       <h1>Choropleth map</h1>
-      <div id="choropleth_map">This div for the world map</div>
+      <div>
+        <label class="switch"
+          ><input
+            type="checkbox"
+            id="togBtn"
+            checked
+            onclick="displayChart()"
+          />
+          <div class="slider round">
+            <!--ADDED HTML --><span class="on">World Map</span
+            ><span class="off">Treemap</span
+            ><!--END-->
+          </div></label
+        >
+      </div>
+      <div id="choropleth_map"></div>
+      <div id="treemap" style="display: none">This is a treemap</div>
 
       <!-- Dropdown list to choose a country to display -->
       <h2>Choose a country to display</h2>
@@ -100,3 +119,19 @@
 <script src="country_drop_down.js"></script>
 <script src="scatter_plot.js"></script>
 <script src="bar_chart.js"></script>
+<script src="choropleth_map.js"></script>
+<script>
+  function displayChart() {
+    var toggle = document.getElementById("togBtn");
+    var choropleth_map_area = document.getElementById("choropleth_map");
+    var treemap_area = document.getElementById("treemap");
+
+    if (toggle.checked === true) {
+      choropleth_map_area.style.display = "block";
+      treemap_area.style.display = "block";
+    } else {
+      choropleth_map_area.style.display = "none";
+      treemap_area.style.display = "block";
+    }
+  }
+</script>

@@ -40,8 +40,6 @@ function draw_bar_chart(data, country = "") {
     });
   }
 
-  console.log(plotting_data);
-
   // Add X axis
   var x = d3.scaleLinear().domain([75, 95]).range([0, width]);
   bar_chart_svg
@@ -82,7 +80,6 @@ function draw_bar_chart(data, country = "") {
 
 // Load data file
 d3.csv("data/taster_avg_points.csv", function (data) {
-  console.log(data);
   // Draw default scatter plot
   draw_bar_chart(data);
 
