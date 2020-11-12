@@ -1,3 +1,5 @@
+import { draw_country_map } from "./country_map.js"
+
 let map_width = 1000,
   map_height = 600
 
@@ -27,7 +29,7 @@ var projection = d3
 var data = d3.map()
 var colorScale = d3
   .scaleThreshold()
-  .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
+  .domain([79, 82, 85, 88, 91, 93, 97, 100])
   .range(d3.schemeBlues[7])
 
 // Load external data and boot
@@ -36,39 +38,49 @@ d3.queue()
     d3.json,
     "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
   )
-  .defer(
-    d3.csv,
-    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv",
-    function (d) {
-      data.set(d.code, +d.pop)
-    }
-  )
+  .defer(d3.csv, "data/region_point.csv")
+  .defer(d3.csv, "data/country_point.csv", function (d) {
+    data.set(d.country, +d.mean_points)
+  })
   .await(ready)
 
-function ready(error, topo) {
+function ready(error, topo, region) {
+  var france_map = topo.features.filter(function (d) {
+    return d.properties.name === "Australia"
+  })
+
+  console.log(france_map)
+
+  draw_country_map(france_map, "Australia")
   let mouseOver = function (d) {
     d3.selectAll(".Country").transition().duration(200).style("opacity", 0.5)
     d3.select(this)
       .transition()
       .duration(200)
       .style("opacity", 1)
-      .style("stroke", "black")
+      .style("stroke", "grey")
     tooltipDiv.transition().duration(200).style("opacity", 0.9)
     tooltipDiv
-      .html(`<strong>${d.properties.name}</strong>`)
+      .html(
+        `<strong>${d.properties.name}</strong><br/>${
+          data.get(d.properties.name)
+            ? "Avg point: " + data.get(d.properties.name).toFixed(3)
+            : "No rating"
+        }`
+      )
       .style("left", d3.event.pageX + 15 + "px")
       .style("top", d3.event.pageY - 40 + "px")
   }
 
   let mouseLeave = function (d) {
-    d3.selectAll(".Country").transition().duration(200).style("opacity", 0.8)
-    d3.select(this).transition().duration(200).style("stroke", "transparent")
+    d3.selectAll(".Country").transition().duration(200).style("opacity", 0.9)
+    d3.select(this).transition().duration(100).style("stroke", "transparent")
     tooltipDiv.transition().duration(300).style("opacity", 0)
   }
 
   let mouseClick = function (d) {
     $("#dropdown_countries").text(d.properties.name)
-    $("#dropdown_countries").val(d.properties.name)
+    console.log(d.properties.name)
   }
 
   // Draw the map
@@ -82,7 +94,7 @@ function ready(error, topo) {
     .attr("d", d3.geoPath().projection(projection))
     // set the color of each country
     .attr("fill", function (d) {
-      d.total = data.get(d.id) || 0
+      d.total = data.get(d.properties.name) || 0
       return colorScale(d.total)
     })
     .style("stroke", "transparent")
