@@ -1,4 +1,4 @@
-/* html,
+html,
 body {
   height: 100%;
 }
@@ -11,7 +11,7 @@ html {
 body {
   display: table-cell;
   vertical-align: middle;
-} */
+}
 
 .dropdown {
   margin: 20px;

@@ -121,3 +121,20 @@ dat1_frame %>%
 
 
 write.csv(treemap_data, 'data/treemap_data.csv', row.names = F)
+
+
+# Replace , by . in geocoding information
+
+region_point <- read.csv('data/region_point.csv')
+
+
+region_point$new_long <- gsub(',', '.', region_point$long)
+region_point$new_lat <- gsub(',', '.', region_point$lat)
+
+
+final_region_point <- region_point[,c('region', 'country', 'mean_points', 'new_long', 'new_lat')]
+
+
+colnames(final_region_point)[4:5] <- c('long','lat')
+
+write.csv(final_region_point, 'data/region_point.csv', row.names = F)

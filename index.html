@@ -50,9 +50,15 @@
       </div>
       <div id="choropleth_map"></div>
       <div id="treemap" style="display: none"></div>
+      <br />
+
+      <!-- Div to display information of a country -->
+      <h3 id="country_map_title" style="display: none"></h3>
+      <div id="country_map" style="display: none"></div>
+      <br />
 
       <!-- Dropdown list to choose a country to display -->
-      <h2>Choose a country to display</h2>
+      <h3>Choose a country to display</h3>
       <div class="dropdown">
         <button
           class="btn btn-secondary dropdown-toggle"
@@ -80,22 +86,14 @@
             />
           </form>
           <div id="menuItems"></div>
-          <div id="empty" class="dropdown-header">No countries found</div>
+          <div id="empty" class="dropdown-header"></div>
         </div>
       </div>
-
-      <!-- Div to display information of a country -->
-      <div id="country_map">This area for country map</div>
-      <br />
 
       <!-- Div to display scatter plot and bar chart -->
       <div class="containter">
         <div id="scatter_plot">
           <!-- Initialize a select button -->
-          <select id="selectButton"></select>
-          <br />
-          <br />
-
           <form id="scatter_plot_factor">
             <label class="radio-inline">
               <input type="radio" name="optradio" value="price" checked />Price
@@ -125,16 +123,21 @@
 <script type="module" src="treemap.js"></script>
 <script>
   function displayChart() {
-    var toggle = document.getElementById("togBtn");
-    var choropleth_map_area = document.getElementById("choropleth_map");
-    var treemap_area = document.getElementById("treemap");
+    var toggle = document.getElementById("togBtn")
+    var choropleth_map_area = document.getElementById("choropleth_map")
+    var treemap_area = document.getElementById("treemap")
+    var country_map = document.getElementById("country_map")
+    var country_map_title = document.getElementById("country_map_title")
 
     if (toggle.checked === true) {
-      choropleth_map_area.style.display = "block";
-      treemap_area.style.display = "none";
+      choropleth_map_area.style.display = "block"
+      treemap_area.style.display = "none"
     } else {
-      choropleth_map_area.style.display = "none";
-      treemap_area.style.display = "block";
+      choropleth_map_area.style.display = "none"
+      treemap_area.style.display = "block"
     }
+
+    country_map.style.display = "none"
+    country_map_title.style.display = "none"
   }
 </script>
