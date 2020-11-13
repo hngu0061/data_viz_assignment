@@ -100,3 +100,24 @@ merge_centroids <- merge(x=wine_countries,
                          y=centroids_data,
                          by='country', all.x=T)
 
+
+
+# Create data for treemap
+
+treemap_data <- filtered_data_viz %>% 
+                  group_by(filtered_data_viz$country) %>%
+                  summarise(count=n())
+
+colnames(treemap_data) <- c('country','count')
+
+treemap_data$parent <- 'world'
+
+treemap_data <- add_row(treemap_data, parent='world', .before=1)
+
+
+dat1_frame %>%
+  group_by(MONTH.YEAR) %>%
+  summarise(count=n())
+
+
+write.csv(treemap_data, 'data/treemap_data.csv', row.names = F)

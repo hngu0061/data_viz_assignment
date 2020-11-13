@@ -32,7 +32,7 @@
   <body>
     <div class="content">
       <!-- Choropleth map -->
-      <h1>Choropleth map</h1>
+      <h1>Wine rating visualization</h1>
       <div>
         <label class="switch"
           ><input
@@ -49,7 +49,7 @@
         >
       </div>
       <div id="choropleth_map"></div>
-      <div id="treemap" style="display: none">This is a treemap</div>
+      <div id="treemap" style="display: none"></div>
 
       <!-- Dropdown list to choose a country to display -->
       <h2>Choose a country to display</h2>
@@ -122,18 +122,19 @@
 <script src="scatter_plot.js"></script>
 <script src="bar_chart.js"></script>
 <script type="module" src="choropleth_map.js"></script>
+<script type="module" src="treemap.js"></script>
 <script>
   function displayChart() {
-    var toggle = document.getElementById("togBtn")
-    var choropleth_map_area = document.getElementById("choropleth_map")
-    var treemap_area = document.getElementById("treemap")
+    var toggle = document.getElementById("togBtn");
+    var choropleth_map_area = document.getElementById("choropleth_map");
+    var treemap_area = document.getElementById("treemap");
 
     if (toggle.checked === true) {
-      choropleth_map_area.style.display = "block"
-      treemap_area.style.display = "none"
+      choropleth_map_area.style.display = "block";
+      treemap_area.style.display = "none";
     } else {
-      choropleth_map_area.style.display = "none"
-      treemap_area.style.display = "block"
+      choropleth_map_area.style.display = "none";
+      treemap_area.style.display = "block";
     }
   }
 </script>
