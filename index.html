@@ -44,6 +44,9 @@
       <h1 class="text-center">Wine rating visualization</h1>
       <div class="row">
         <div class="col-auto mr-auto">
+          <p style="font-weight: bold; font-size: 12px">
+            Select choropleth map/treemap
+          </p>
           <label class="switch"
             ><input
               type="checkbox"
@@ -58,16 +61,50 @@
             </div></label
           >
         </div>
-        <div class="col-auto">Testing</div>
+        <div class="col-auto">
+          <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+              <button class="btn btn-primary" type="button" id="info_button">
+                More info
+              </button>
+            </div>
+            <div class="btn-group" role="group">
+              <button
+                class="btn btn-danger"
+                type="button"
+                id="reset_button"
+                onclick="location.reload()"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Credit to https://codeconvey.com/display-message-on-button-click-in-html/ -->
+      <div class="custom-model-main">
+        <div class="custom-model-inner">
+          <div class="close-btn">×</div>
+          <br />
+          <div class="custom-model-wrap">
+            <div class="pop-up-content-wrap">
+              <h2>Introduction</h2>
+              <p>This is message box popup that revealed on button click.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-overlay"></div>
       </div>
 
       <!-- Choropleth map -->
       <div class="row" id="choropleth_map_area">
         <div id="choropleth_map"></div>
+        <p class="text-center" style="font-style: italic; font-weight: bold">
+          World map of wine rating
+        </p>
       </div>
-      <p class="text-center" style="font-style: italic; font-weight: bold">
-        World map of wine rating
-      </p>
+
       <!-- Treemap -->
       <div class="row" style="display: none" id="treemap_area">
         <div id="treemap"></div>
@@ -87,6 +124,7 @@
         <div id="country_map"></div>
       </div>
 
+      <!-- Credit to https://www.w3schools.com/howto/howto_js_filter_dropdown.asp -->
       <!-- Dropdown list to choose a country to display -->
       <h2 class="text-center">Choose a country to display</h2>
       <div class="row">
@@ -187,6 +225,14 @@
     }
 
     country_map_area.style.display = "none"
-    country_map_area.style.display = "none"
+    country_map_title.style.display = "none"
   }
+</script>
+<script>
+  $("#info_button").on("click", function () {
+    $(".custom-model-main").addClass("model-open")
+  })
+  $(".close-btn, .bg-overlay").click(function () {
+    $(".custom-model-main").removeClass("model-open")
+  })
 </script>
