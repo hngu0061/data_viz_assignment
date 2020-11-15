@@ -1,6 +1,8 @@
 import { draw_country_map } from "./country_map.js"
+import { draw_scatter_plot } from "./scatter_plot.js"
+import { draw_bar_chart } from "./bar_chart.js"
 
-let map_width = 800,
+let map_width = 1000,
   map_height = 600
 
 // append the svg object to the body of the page
@@ -31,12 +33,17 @@ var colorScale = d3
   .domain([79, 82, 85, 88, 91, 93, 97, 100])
   .range(d3.schemeBlues[7])
 
+// Color legend
+var choroplethColorLegend = d3
+  .legendColor()
+  .shapeWidth(20)
+  .cells(5)
+  .title("Point range")
+  .scale(colorScale)
+
 // Load external data and boot
 d3.queue()
-  .defer(
-    d3.json,
-    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
-  )
+  .defer(d3.json, "data/world.geojson")
   .defer(d3.csv, "data/region_point.csv")
   .defer(d3.csv, "data/country_point.csv", function (d) {
     data.set(d.country, +d.mean_points)
@@ -120,10 +127,10 @@ function ready(error, topo, region) {
 
     if (wine_countries.includes(d.properties.name)) {
       $("#dropdown_countries").text(d.properties.name)
-      var country_map = document.getElementById("country_map")
+      var country_map_area = document.getElementById("country_map_area")
       var country_map_title = document.getElementById("country_map_title")
 
-      country_map.style.display = "block"
+      country_map_area.style.display = "block"
       country_map_title.style.display = "block"
 
       country_map_title.innerHTML = `Wine review for regions in ${d.properties.name}`
@@ -137,6 +144,19 @@ function ready(error, topo, region) {
       })
 
       draw_country_map(country_map, country_points, d.properties.name)
+
+      // Redraw scatter plot and bar chart
+      var factor = document.getElementById("scatter_plot_factor")
+      var factor_choice
+      for (var i = 0; i < factor.length; i++) {
+        if (factor[i].checked) {
+          factor_choice = factor[i].value
+        }
+      }
+
+      // draw a new plot
+      draw_scatter_plot(factor_choice, d.properties.name)
+      draw_bar_chart(d.properties.name)
     } else {
       alert(`There is no info for ${d.properties.name}`)
     }
@@ -164,4 +184,14 @@ function ready(error, topo, region) {
     .on("mouseover", mouseOver)
     .on("mouseleave", mouseLeave)
     .on("click", mouseClick)
+
+  // Add color legend
+  choropleth_map_svg
+    .append("g")
+    .attr("class", "choroplethColorLegend")
+    .attr("transform", "translate(20,400)")
+
+  choropleth_map_svg
+    .select(".choroplethColorLegend")
+    .call(choroplethColorLegend)
 }

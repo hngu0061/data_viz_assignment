@@ -28,71 +28,104 @@
 
     <!-- Geopath script for choropleth map-->
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+    <!-- Add script for spinner -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
+
+    <!-- Add script for creating d3 legend-->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"
+      integrity="sha512-wNH6xsp2n8CfB91nrBtfc4sfLwYPBMjSWVUwQOp60AYYXH6i8yCwuKFZ4rgK2i6pQek/b+bSyR7b01/922IBzQ=="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <div class="content">
-      <!-- Choropleth map -->
-      <h1>Wine rating visualization</h1>
-      <div>
-        <label class="switch"
-          ><input
-            type="checkbox"
-            id="togBtn"
-            checked
-            onclick="displayChart()"
-          />
-          <div class="slider round">
-            <!--ADDED HTML --><span class="on">World Map</span
-            ><span class="off">Treemap</span
-            ><!--END-->
-          </div></label
-        >
-      </div>
-      <div id="choropleth_map"></div>
-      <div id="treemap" style="display: none"></div>
-      <br />
-
-      <!-- Dropdown list to choose a country to display -->
-      <h3>Choose a country to display</h3>
-      <div class="dropdown">
-        <button
-          class="btn btn-secondary dropdown-toggle"
-          type="button"
-          id="dropdown_countries"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-          onchange="changeButton()"
-        >
-          Choose a country
-        </button>
-        <div
-          id="menu"
-          class="dropdown-menu"
-          aria-labelledby="dropdown_countries"
-        >
-          <form class="px-4 py-2">
-            <input
-              type="search"
-              class="form-control"
-              id="searchCountry"
-              placeholder="Choose a country"
-              autofocus="autofocus"
+    <div class="container" id="content">
+      <h1 class="text-center">Wine rating visualization</h1>
+      <div class="row">
+        <div class="col-auto mr-auto">
+          <label class="switch"
+            ><input
+              type="checkbox"
+              id="togBtn"
+              checked
+              onclick="displayChart()"
             />
-          </form>
-          <div id="menuItems"></div>
-          <div id="empty" class="dropdown-header"></div>
+            <div class="slider round">
+              <!--ADDED HTML --><span class="on">World Map</span
+              ><span class="off">Treemap</span
+              ><!--END-->
+            </div></label
+          >
         </div>
+        <div class="col-auto">Testing</div>
       </div>
+
+      <!-- Choropleth map -->
+      <div class="row" id="choropleth_map_area">
+        <div id="choropleth_map"></div>
+      </div>
+      <p class="text-center" style="font-style: italic; font-weight: bold">
+        World map of wine rating
+      </p>
+      <!-- Treemap -->
+      <div class="row" style="display: none" id="treemap_area">
+        <div id="treemap"></div>
+        <p class="text-center" style="font-style: italic; font-weight: bold">
+          Number of wine reviews per country
+        </p>
+      </div>
+      <br />
 
       <!-- Div to display information of a country -->
-      <h3 id="country_map_title" style="display: none"></h3>
-      <div id="country_map" style="display: none"></div>
-      <br />
+      <h3
+        class="text-center"
+        id="country_map_title"
+        style="display: none; color: red"
+      ></h3>
+      <div class="row" style="display: none" id="country_map_area">
+        <div id="country_map"></div>
+      </div>
 
-      <!-- Div to display scatter plot and bar chart -->
-      <div class="containter">
-        <div id="scatter_plot">
+      <!-- Dropdown list to choose a country to display -->
+      <h2 class="text-center">Choose a country to display</h2>
+      <div class="row">
+        <div class="dropdown col d-flex justify-content-center">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdown_countries"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            onchange="changeButton()"
+          >
+            Choose a country
+          </button>
+          <div
+            id="menu"
+            class="dropdown-menu"
+            aria-labelledby="dropdown_countries"
+          >
+            <form class="px-4 py-2">
+              <input
+                type="search"
+                class="form-control"
+                id="searchCountry"
+                placeholder="Choose a country"
+                autofocus="autofocus"
+              />
+            </form>
+            <div id="menuItems"></div>
+            <div id="empty" class="dropdown-header"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div clas="row">
+        <div class="col-md" id="scatter_plot">
           <!-- Initialize a select button -->
           <form id="scatter_plot_factor">
             <label class="radio-inline">
@@ -106,11 +139,28 @@
               Vintage Year
             </label>
           </form>
-
-          <!-- Create a div where the graph will take place -->
-          <div id="my_scatter_plot"></div>
         </div>
-        <div id="my_bar_chart">Bar chart</div>
+      </div>
+      <div class="row">
+        <!-- Create a div where the graph will take place -->
+        <div class="col-md">
+          <div class="row" id="my_scatter_plot"></div>
+          <br />
+          <p
+            class="row"
+            id="my_scatter_plot_text"
+            style="font-style: italic; font-size: 14px"
+          ></p>
+        </div>
+        <div class="col-md">
+          <div class="row" id="my_bar_chart"></div>
+          <br />
+          <p
+            class="row text-center"
+            id="my_bar_chart_text"
+            style="font-style: italic; font-size: 14px"
+          ></p>
+        </div>
       </div>
     </div>
   </body>
@@ -123,9 +173,9 @@
 <script>
   function displayChart() {
     var toggle = document.getElementById("togBtn")
-    var choropleth_map_area = document.getElementById("choropleth_map")
-    var treemap_area = document.getElementById("treemap")
-    var country_map = document.getElementById("country_map")
+    var choropleth_map_area = document.getElementById("choropleth_map_area")
+    var treemap_area = document.getElementById("treemap_area")
+    var country_map_area = document.getElementById("country_map_area")
     var country_map_title = document.getElementById("country_map_title")
 
     if (toggle.checked === true) {
@@ -136,7 +186,7 @@
       treemap_area.style.display = "block"
     }
 
-    country_map.style.display = "none"
-    country_map_title.style.display = "none"
+    country_map_area.style.display = "none"
+    country_map_area.style.display = "none"
   }
 </script>

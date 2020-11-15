@@ -1,4 +1,4 @@
-html,
+/* html,
 body {
   height: 100%;
 }
@@ -11,7 +11,7 @@ html {
 body {
   display: table-cell;
   vertical-align: middle;
-}
+} */
 
 .dropdown {
   margin: 20px;
@@ -159,4 +159,33 @@ div.treemapTooltip {
 .pulse {
   /* Giving Animation Function */
   -webkit-animation: pulse 0.75s linear infinite;
+}
+
+/* Relocate the map to the center of scree */
+
+#country_map {
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* Create two equal columns that floats next to each other */
+.factorColumn {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.factorRow:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .factorColumn {
+    width: 100%;
+  }
 }

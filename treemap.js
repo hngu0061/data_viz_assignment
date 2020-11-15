@@ -1,8 +1,10 @@
 import { draw_country_map } from "./country_map.js"
+import { draw_scatter_plot } from "./scatter_plot.js"
+import { draw_bar_chart } from "./bar_chart.js"
 
 // set the dimensions and margins of the graph
 var treemap_margin = { top: 10, right: 10, bottom: 10, left: 10 },
-  treemap_width = 800 - treemap_margin.left - treemap_margin.right,
+  treemap_width = 1000 - treemap_margin.left - treemap_margin.right,
   treemap_height = 600 - treemap_margin.top - treemap_margin.bottom
 
 // append the svg object to the body of the page
@@ -17,10 +19,19 @@ var treemap_svg = d3
     "translate(" + treemap_margin.left + "," + treemap_margin.top + ")"
   )
 
+// Color scale
 var myColor = d3
   .scaleSequential()
   .domain([1, 37000])
   .interpolator(d3.interpolateGreens)
+
+// Color legend
+var treemapColorLegend = d3
+  .legendColor()
+  .shapeWidth(20)
+  .cells(5)
+  .title("Number of reviews")
+  .scale(myColor)
 
 // create tooltip div
 let treemapTooltip = d3
@@ -31,10 +42,7 @@ let treemapTooltip = d3
 
 // Read data
 d3.queue()
-  .defer(
-    d3.json,
-    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
-  )
+  .defer(d3.json, "data/world.geojson")
   .defer(d3.csv, "data/region_point.csv")
   .defer(d3.csv, "data/treemap_data.csv")
   .await(ready)
@@ -86,10 +94,10 @@ function ready(error, topo, region, data) {
     $("#dropdown_countries").text(d.data.country)
     console.log(d.data.country)
 
-    var country_map = document.getElementById("country_map")
+    var country_map_area = document.getElementById("country_map_area")
     var country_map_title = document.getElementById("country_map_title")
 
-    country_map.style.display = "block"
+    country_map_area.style.display = "block"
     country_map_title.style.display = "block"
 
     country_map_title.innerHTML = `Wine review for regions in ${d.data.country}`
@@ -103,6 +111,19 @@ function ready(error, topo, region, data) {
     })
 
     draw_country_map(country_map, country_points, d.data.country)
+
+    // Redraw scatter plot and bar chart
+    var factor = document.getElementById("scatter_plot_factor")
+    var factor_choice
+    for (var i = 0; i < factor.length; i++) {
+      if (factor[i].checked) {
+        factor_choice = factor[i].value
+      }
+    }
+
+    // draw a new plot
+    draw_scatter_plot(factor_choice, d.data.country)
+    draw_bar_chart(d.data.country)
   }
 
   // use this information to add rectangles:

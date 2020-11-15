@@ -34,6 +34,15 @@ export function draw_country_map(country_geo, region_points, country) {
       .domain([80, 95])
       .interpolator(d3.interpolateReds)
 
+    // Color legend
+    var countryColorLegend = d3
+      .legendColor()
+      .shapeWidth(30)
+      .cells(5)
+      .title("Point range")
+      .orient("vertical")
+      .scale(dot_colors)
+
     // Add a scale for bubble size
     var size = d3
       .scaleLinear()
@@ -136,5 +145,13 @@ export function draw_country_map(country_geo, region_points, country) {
       .style("opacity", 0)
       .on("mouseover", mouseOver)
       .on("mouseleave", mouseLeave)
+
+    // Add color legend
+    country_map_svg
+      .append("g")
+      .attr("class", "countryColorLegend")
+      .attr("transform", "translate(0,385)")
+
+    country_map_svg.select(".countryColorLegend").call(countryColorLegend)
   })
 }

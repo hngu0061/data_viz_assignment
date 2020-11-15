@@ -25,6 +25,13 @@ export function draw_bar_chart(country = "") {
       "translate(" + bar_chart_margin.left + "," + bar_chart_margin.top + ")"
     )
 
+  // create tooltip div
+  let tasterTooltipDiv = d3
+    .select("#my_bar_chart")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+
   d3.csv("data/taster_avg_points.csv", function (data) {
     let plotting_data = data
 
@@ -37,14 +44,19 @@ export function draw_bar_chart(country = "") {
       "#e6ab02",
     ]
 
+    var display_text = document.getElementById("my_bar_chart_text")
+
     if (country !== "") {
+      display_text.innerHTML = `Taster's average points (country: ${country})`
       plotting_data = data.filter(function (row) {
         return row.country === country
       })
+    } else {
+      display_text.innerHTML = `Taster's average points (the world)`
     }
 
     // Add X axis
-    var x = d3.scaleLinear().domain([75, 95]).range([0, bar_chart_width])
+    var x = d3.scaleLinear().domain([75, 96]).range([0, bar_chart_width])
     bar_chart_svg
       .append("g")
       .attr("transform", "translate(0," + bar_chart_height + ")")
@@ -62,6 +74,18 @@ export function draw_bar_chart(country = "") {
       .range([0, bar_chart_height])
       .padding(0.1)
     bar_chart_svg.append("g").attr("id", "yAxisBarChart").call(d3.axisLeft(y))
+
+    let mouseOver = function (d) {
+      tasterTooltipDiv.transition().duration(200).style("opacity", 0.9)
+      tasterTooltipDiv
+        .html(`Avg points: ${d.mean_points}`)
+        .style("left", d3.event.pageX + 15 + "px")
+        .style("top", d3.event.pageY - 40 + "px")
+    }
+
+    let mouseLeave = function (d) {
+      tasterTooltipDiv.transition().duration(300).style("opacity", 0)
+    }
 
     // Plotting bars
     bar_chart_svg

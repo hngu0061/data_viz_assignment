@@ -1,11 +1,11 @@
+// Credit to https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
+// I followed this tutorial to customize the dropdown menu for countries
+
 import { draw_country_map } from "./country_map.js"
 
 d3.queue()
   .defer(d3.csv, "data/country.csv")
-  .defer(
-    d3.json,
-    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
-  )
+  .defer(d3.json, "data/world.geojson")
   .defer(d3.csv, "data/region_point.csv")
   .await(ready)
 
@@ -81,7 +81,7 @@ function ready(error, data, topo, region) {
 
     draw_country_map(country_map, country_points, country)
 
-    var country_area = document.getElementById("country_map")
+    var country_area = document.getElementById("country_map_area")
     var country_map_title = document.getElementById("country_map_title")
     country_map_title.innerHTML = `Wine review for regions in ${country}`
 
