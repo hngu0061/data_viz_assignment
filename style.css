@@ -144,3 +144,19 @@ div.treemapTooltip {
   border-radius: 8px;
   pointer-events: none;
 }
+
+/* Pulsing circle, credit to https://codepen.io/blackjacques/pen/BaaqKpO */
+
+@-webkit-keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.pulse {
+  /* Giving Animation Function */
+  -webkit-animation: pulse 0.75s linear infinite;
+}

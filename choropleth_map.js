@@ -18,7 +18,6 @@ let tooltipDiv = d3
   .style("opacity", 0)
 
 // Map and projection
-var path = d3.geoPath()
 var projection = d3
   .geoMercator()
   .scale(120)
@@ -58,7 +57,7 @@ function ready(error, topo, region) {
         `<strong>${d.properties.name}</strong><br/>${
           data.get(d.properties.name)
             ? "Avg point: " +
-              data.get(d.properties.name).toFixed(3) +
+              data.get(d.properties.name).toFixed(2) +
               "<br/>Click for more info"
             : "No rating"
         }`

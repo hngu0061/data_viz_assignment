@@ -16,7 +16,6 @@ export function draw_country_map(country_geo, region_points, country) {
       .attr("height", country_map_height)
 
     // Map and projection
-    var path = d3.geoPath()
     var projection = d3
       .geoMercator()
       .translate([country_map_width / 2, country_map_height / 2])
@@ -25,29 +24,21 @@ export function draw_country_map(country_geo, region_points, country) {
       return d.country === country
     })
 
-    let pastel_colors = [
-      "#b3e2cd",
-      "#cbd5e8",
-      "#f4cae4",
-      "#e6f5c9",
-      "#fff2ae",
-      "#f1e2cc",
-      "#cccccc",
-    ]
+    let pastel_colors = ["#e6f5c9", "#fff2ae"]
 
     var country_color =
       pastel_colors[Math.floor(Math.random() * pastel_colors.length)]
 
     var dot_colors = d3
       .scaleSequential()
-      .domain([80, 100])
+      .domain([80, 95])
       .interpolator(d3.interpolateReds)
 
     // Add a scale for bubble size
     var size = d3
       .scaleLinear()
-      .domain([80, 100]) // What's in the data
-      .range([8, 18]) // Size in pixel
+      .domain([80, 95]) // What's in the data
+      .range([5, 12]) // Size in pixel
 
     var scale_unit = 1200
     if (["USA", "Canada", "China"].includes(country)) {
@@ -58,9 +49,33 @@ export function draw_country_map(country_geo, region_points, country) {
       scale_unit = 600
     }
 
+    // update projection based on country lat long and scale unit
     projection
       .center([country_info[0].longitude, country_info[0].latitude])
       .scale(scale_unit)
+
+    // create tooltip div
+    let regiontooltipDiv = d3
+      .select("#country_map")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+
+    let mouseOver = function (d) {
+      regiontooltipDiv.transition().duration(200).style("opacity", 0.9)
+      regiontooltipDiv
+        .html(
+          `<strong>${d.region}</strong><br/>Avg points: ${Number(
+            d.mean_points
+          ).toFixed(2)}`
+        )
+        .style("left", d3.event.pageX + 15 + "px")
+        .style("top", d3.event.pageY - 40 + "px")
+    }
+
+    let mouseLeave = function (d) {
+      regiontooltipDiv.transition().duration(300).style("opacity", 0)
+    }
 
     // Draw the map
     country_map_svg
@@ -75,14 +90,12 @@ export function draw_country_map(country_geo, region_points, country) {
       .attr("fill", country_color)
       .style("stroke", country_color)
 
-    console.log(region_points)
-    // Draw region points
     country_map_svg
       .selectAll("regionCircles")
       .data(region_points)
       .enter()
       .append("circle")
-      .attr("class", "region_points")
+      .classed("pulse", true)
       .attr("cx", function (d) {
         return projection([+d.long, +d.lat])[0]
       })
@@ -98,5 +111,30 @@ export function draw_country_map(country_geo, region_points, country) {
       .attr("stroke", function (d) {
         return dot_colors(+d.mean_points)
       })
+
+    country_map_svg
+      .selectAll("regionCircles")
+      .data(region_points)
+      .enter()
+      .append("circle")
+      .attr("class", "regionCircles")
+      .attr("cx", function (d) {
+        return projection([+d.long, +d.lat])[0]
+      })
+      .attr("cy", function (d) {
+        return projection([+d.long, +d.lat])[1]
+      })
+      .attr("r", function (d) {
+        return size(+d.mean_points)
+      })
+      .style("fill", function (d) {
+        return dot_colors(+d.mean_points)
+      })
+      .attr("stroke", function (d) {
+        return dot_colors(+d.mean_points)
+      })
+      .style("opacity", 0)
+      .on("mouseover", mouseOver)
+      .on("mouseleave", mouseLeave)
   })
 }

@@ -52,11 +52,6 @@
       <div id="treemap" style="display: none"></div>
       <br />
 
-      <!-- Div to display information of a country -->
-      <h3 id="country_map_title" style="display: none"></h3>
-      <div id="country_map" style="display: none"></div>
-      <br />
-
       <!-- Dropdown list to choose a country to display -->
       <h3>Choose a country to display</h3>
       <div class="dropdown">
@@ -90,6 +85,11 @@
         </div>
       </div>
 
+      <!-- Div to display information of a country -->
+      <h3 id="country_map_title" style="display: none"></h3>
+      <div id="country_map" style="display: none"></div>
+      <br />
+
       <!-- Div to display scatter plot and bar chart -->
       <div class="containter">
         <div id="scatter_plot">
@@ -116,11 +116,10 @@
   </body>
 </html>
 
-<script src="country_drop_down.js"></script>
-<script src="scatter_plot.js"></script>
-<script src="bar_chart.js"></script>
+<script type="module" src="country_drop_down.js"></script>
 <script type="module" src="choropleth_map.js"></script>
 <script type="module" src="treemap.js"></script>
+<script type="module" src="factor_plot.js"></script>
 <script>
   function displayChart() {
     var toggle = document.getElementById("togBtn")

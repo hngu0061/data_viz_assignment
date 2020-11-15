@@ -30,7 +30,16 @@ let treemapTooltip = d3
   .style("opacity", 0)
 
 // Read data
-d3.csv("data/treemap_data.csv", function (data) {
+d3.queue()
+  .defer(
+    d3.json,
+    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
+  )
+  .defer(d3.csv, "data/region_point.csv")
+  .defer(d3.csv, "data/treemap_data.csv")
+  .await(ready)
+
+function ready(error, topo, region, data) {
   // stratify the data: reformatting for d3.js
   var root = d3
     .stratify()
@@ -76,6 +85,24 @@ d3.csv("data/treemap_data.csv", function (data) {
   let mouseClick = function (d) {
     $("#dropdown_countries").text(d.data.country)
     console.log(d.data.country)
+
+    var country_map = document.getElementById("country_map")
+    var country_map_title = document.getElementById("country_map_title")
+
+    country_map.style.display = "block"
+    country_map_title.style.display = "block"
+
+    country_map_title.innerHTML = `Wine review for regions in ${d.data.country}`
+
+    var country_points = region.filter(function (data) {
+      return data.country === d.data.country
+    })
+
+    var country_map = topo.features.filter(function (data) {
+      return data.properties.name === d.data.country
+    })
+
+    draw_country_map(country_map, country_points, d.data.country)
   }
 
   // use this information to add rectangles:
@@ -104,4 +131,4 @@ d3.csv("data/treemap_data.csv", function (data) {
     .on("click", mouseClick)
     .on("mouseover", mouseOver)
     .on("mouseleave", mouseLeave)
-})
+}
