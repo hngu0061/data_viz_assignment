@@ -1,3 +1,5 @@
+// Credit to https://www.d3-graph-gallery.com/graph/barplot_horizontal.html
+
 // function to draw bar chart
 export function draw_bar_chart(country = "") {
   let bar_chart_margin = { top: 10, right: 100, bottom: 30, left: 100 },
@@ -46,6 +48,7 @@ export function draw_bar_chart(country = "") {
 
     var display_text = document.getElementById("my_bar_chart_text")
 
+    // update chart description
     if (country !== "") {
       display_text.innerHTML = `Taster's average points (country: ${country})`
       plotting_data = data.filter(function (row) {
@@ -75,6 +78,7 @@ export function draw_bar_chart(country = "") {
       .padding(0.1)
     bar_chart_svg.append("g").attr("id", "yAxisBarChart").call(d3.axisLeft(y))
 
+    // function to display tooltip
     let mouseOver = function (d) {
       tasterTooltipDiv.transition().duration(200).style("opacity", 0.9)
       tasterTooltipDiv
@@ -83,6 +87,7 @@ export function draw_bar_chart(country = "") {
         .style("top", d3.event.pageY - 40 + "px")
     }
 
+    // function to hide tooltip
     let mouseLeave = function (d) {
       tasterTooltipDiv.transition().duration(300).style("opacity", 0)
     }

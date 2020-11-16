@@ -49,6 +49,7 @@ export function draw_country_map(country_geo, region_points, country) {
       .domain([80, 95]) // What's in the data
       .range([5, 12]) // Size in pixel
 
+    // Choosing scale for each country
     var scale_unit = 1200
     if (["USA", "Canada", "China"].includes(country)) {
       scale_unit = 460
@@ -70,6 +71,7 @@ export function draw_country_map(country_geo, region_points, country) {
       .attr("class", "tooltip")
       .style("opacity", 0)
 
+    // function to display tooltip
     let mouseOver = function (d) {
       regiontooltipDiv.transition().duration(200).style("opacity", 0.9)
       regiontooltipDiv
@@ -82,6 +84,7 @@ export function draw_country_map(country_geo, region_points, country) {
         .style("top", d3.event.pageY - 40 + "px")
     }
 
+    // function to hide tooltip
     let mouseLeave = function (d) {
       regiontooltipDiv.transition().duration(300).style("opacity", 0)
     }
@@ -99,6 +102,7 @@ export function draw_country_map(country_geo, region_points, country) {
       .attr("fill", country_color)
       .style("stroke", country_color)
 
+    // Draw circles for blinking animation
     country_map_svg
       .selectAll("regionCircles")
       .data(region_points)
@@ -121,6 +125,7 @@ export function draw_country_map(country_geo, region_points, country) {
         return dot_colors(+d.mean_points)
       })
 
+    // Drawing another circle as transparent element to display tooltip
     country_map_svg
       .selectAll("regionCircles")
       .data(region_points)

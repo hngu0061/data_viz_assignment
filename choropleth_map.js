@@ -1,3 +1,5 @@
+// Credit to https://www.d3-graph-gallery.com/graph/choropleth_hover_effect.html
+
 import { draw_country_map } from "./country_map.js"
 import { draw_scatter_plot } from "./scatter_plot.js"
 import { draw_bar_chart } from "./bar_chart.js"
@@ -19,7 +21,7 @@ let tooltipDiv = d3
   .attr("class", "tooltip")
   .style("opacity", 0)
 
-// Map and projection
+// add projection
 var projection = d3
   .geoMercator()
   .scale(120)
@@ -50,7 +52,9 @@ d3.queue()
   })
   .await(ready)
 
+//function to draw map
 function ready(error, topo, region) {
+  // function to display tooltip
   let mouseOver = function (d) {
     d3.selectAll(".Country").transition().duration(200).style("opacity", 0.5)
     d3.select(this)
@@ -73,13 +77,16 @@ function ready(error, topo, region) {
       .style("top", d3.event.pageY - 40 + "px")
   }
 
+  // function to hide tooltip
   let mouseLeave = function (d) {
     d3.selectAll(".Country").transition().duration(200).style("opacity", 0.9)
     d3.select(this).transition().duration(100).style("stroke", "transparent")
     tooltipDiv.transition().duration(300).style("opacity", 0)
   }
 
+  // function to draw a country map
   let mouseClick = function (d) {
+    // countries with valid reviews
     var wine_countries = [
       "Portugal",
       "USA",
@@ -125,6 +132,7 @@ function ready(error, topo, region) {
       "China",
     ]
 
+    // draw country map if country is found
     if (wine_countries.includes(d.properties.name)) {
       $("#dropdown_countries").text(d.properties.name)
       var country_map_area = document.getElementById("country_map_area")

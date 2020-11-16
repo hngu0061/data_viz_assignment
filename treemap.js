@@ -1,3 +1,4 @@
+// Credit to https://www.d3-graph-gallery.com/graph/treemap_basic.html
 import { draw_country_map } from "./country_map.js"
 import { draw_scatter_plot } from "./scatter_plot.js"
 import { draw_bar_chart } from "./bar_chart.js"

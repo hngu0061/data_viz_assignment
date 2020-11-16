@@ -3,6 +3,7 @@
 
 import { draw_country_map } from "./country_map.js"
 
+// loading data
 d3.queue()
   .defer(d3.csv, "data/country.csv")
   .defer(d3.json, "data/world.geojson")
@@ -16,10 +17,10 @@ function ready(error, data, topo, region) {
     names.push(data[i].x)
   }
 
-  //Find the input search box
+  // Find the input search box
   let search = document.getElementById("searchCountry")
 
-  //Find every item inside the dropdown
+  // Find every item inside the dropdown
   let items = document.getElementsByClassName("dropdown-item")
   function buildDropDown(values) {
     let contents = []
@@ -32,11 +33,11 @@ function ready(error, data, topo, region) {
     }
     $("#menuItems").append(contents.join(""))
 
-    //Hide the row that shows no items were found
+    // Hide the row that shows no items were found
     $("#empty").hide()
   }
 
-  //Capture the event when user types into the search box
+  // Capture the event when user types into the search box
   window.addEventListener("input", function () {
     filter(search.value.trim().toLowerCase())
   })
@@ -64,7 +65,7 @@ function ready(error, data, topo, region) {
     }
   }
 
-  //If the user clicks on any item, set the title of the button as the text of the item and display the country map
+  // If the user clicks on any item, set the title of the button as the text of the item and display the country map
   $("#menuItems").on("click", ".dropdown-item", function () {
     $("#dropdown_countries").text($(this)[0].value)
     $("#dropdown_countries").dropdown("toggle")

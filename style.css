@@ -244,7 +244,7 @@ div.treemapTooltip {
   transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
   display: inline-block;
   vertical-align: middle;
-  width: 600px;
+  width: 500px;
   margin: 30px auto;
   max-width: 97%;
 }
